@@ -69,6 +69,16 @@ class SlackMessageArchiver:
                             time.sleep(1.5)
                             continue
                         return (e, msg)
+                    except Exception as e:
+                        # Only continue when thread=1
+                        if self._conc == 1:
+                            self._logger.error("\tCan't delete msg \"%s\", channel %s, user %s, ts %s: %s", msg['text'],
+                                               self._channel, msg['user'], msg['ts'], e)
+                            time.sleep(1.5)
+                            continue
+                        else:  
+                            raise e
+
                     break
 
             return None
