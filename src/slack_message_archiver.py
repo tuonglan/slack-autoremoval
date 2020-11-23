@@ -103,6 +103,8 @@ class SlackMessageArchiver:
         total_errs = []
         total_download_errs = []
         total_delete_errs = []
+        msg_count = 0
+        file_count = 0
 
         while start_ts < end_ts:
             # Get the monthly directory
@@ -125,11 +127,13 @@ class SlackMessageArchiver:
                 self._logger.info("Messages on date %s is empty, continue the next day", msg_date)
                 start_ts += 24*3600
                 continue
+            msg_count += len(msgs)
 
             # Save the files
             if download:
                 self._logger.info("Downloaded %d message(s), saving files if any", len(msgs))
                 files = [f for msg in msgs if msg.get('files', False) for f in msg['files']]
+                file_count += len(files)
                 if files:
                     download_errs = self._download_files(files_path, files)
                     if download_errs:
@@ -153,6 +157,7 @@ class SlackMessageArchiver:
                     total_delete_errs.extend(delete_errs)
                     self._logger.error("Can't delete %d messages", len(delete_errs))
 
-        return {'errs': total_errs, 'download_errs': total_download_errs, 'delete_errs': total_delete_errs}
+        return {'errs': total_errs, 'download_errs': total_download_errs, 'delete_errs': total_delete_errs,
+                'msg_count': msg_count, 'file_count': file_count}
 
 

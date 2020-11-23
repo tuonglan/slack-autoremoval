@@ -29,8 +29,8 @@ class SlackBot:
     def post_info(self, title, text):
         return self.post_message(title, text)
 
-    def post_warning(self, title, text, self._channel_warning):
-        return self.post_message(title, text, '#EBB424')
+    def post_warning(self, title, text):
+        return self.post_message(title, text, '#EBB424', channel=self._channel_warning)
 
     def post_alert(self, title, text):
         new_title = "%s <@%s>" % (title, self._notifee) if self._notifee else title
