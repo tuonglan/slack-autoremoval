@@ -31,6 +31,10 @@ class SlackMessageArchiver:
         download_errs = []
 
         for f in files:
+            if not 'url_private_download' in f:
+                print("Invalid file: %s" % f)
+                continue
+
             strs = f['url_private_download'].split('/')
             basename = "%s-%s" % (strs[-3], strs[-1])
             filename = os.path.join(files_path, basename)
