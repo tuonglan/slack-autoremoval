@@ -32,7 +32,7 @@ def archive_messages(args):
         if result['errs'] or result['download_errs'] or result['delete_errs']:
             msgs = "%s\nNumber of general erros: %d\nNumber of downloading erros %d\nNumber of deleting errors %d" % (
                         msg, len(result['errs']), len(result['download_errs']), len(result['delete_errs']))
-            g_slack.post_alert("XXL Archive from %s to %s" % (args.start_date, args.end_date))
+            g_slack.post_alert("XXL Archive from %s to %s" % (args.start_date, args.end_date), msgs)
         else:
             g_slack.post_info("XXL Archive from %s to %s" % (args.start_date, args.end_date), msg)
 
