@@ -58,6 +58,15 @@ class SlackMessageArchiver:
         
         # Define delete functions
         def delete_msg(msg):
+            # Get replies
+            if msg.get('reply_count', 0) > 0:
+                print("---------------------\n %s \n" % msg)
+                replies = slack_api.get_replies(self._token, self._channel, msg['ts'])
+
+                for r in replies[1:]:
+                    #print("\tDeleting reply: %s" % r)
+                    delete_msg(r)
+
             if not msg['user'] in self._user_tokens:
                 self._logger.error("\tCan't delete msg \"%s\", channel %s, user %s, ts %s: Unauthorized", msg['text'],
                                     self._channel, msg['user'], msg['ts'])
@@ -147,6 +156,10 @@ class SlackMessageArchiver:
 
             # Save the message to archive file
             filename = os.path.join(archive_path_month, "%s.gz" % msg_date)
+            idx = 1
+            while os.path.isfile(filename):
+                filename = os.path.join(archive_path_month, "%s_%03d.gz" %(msg_date, idx))
+                idx += 1
             with gzip.open(filename,  'w') as writer:
                 writer.write(json.dumps(msgs, indent=4).encode('utf-8'))
             self._logger.info("Messages on date %s saved to %s", msg_date, filename)

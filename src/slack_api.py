@@ -56,3 +56,13 @@ def delete_message(token, channel, ts):
     if not result['ok']:
         raise APIFailed(result['error'])
 
+def get_replies(token, channel, ts):
+    url = "https://slack.com/api/conversations.replies?channel=%s&ts=%s" % (channel, ts)
+    headers = {"Authorization": "Bearer %s" % token, "Content-Type": "application/json;charset=utf-8"}
+    
+    re = requests.get(url, headers=headers)
+    result = re.json()
+    if not result['ok']:
+        raise APIFailed(result['error'])
+
+    return result['messages']
