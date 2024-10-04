@@ -110,8 +110,8 @@ class SlackMessageArchiver:
 
 
     def archive_messages(self, start_date, end_date, archive_path, download=True, delete=False):
-        start_ts = _str_to_ts(start_date, "%Y%m%d")
-        end_ts = _str_to_ts(end_date, "%Y%m%d")
+        start_ts = _str_to_ts(start_date, "%Y%m%d%H")
+        end_ts = _str_to_ts(end_date, "%Y%m%d%H")
         
         total_errs = []
         total_download_errs = []
@@ -156,11 +156,11 @@ class SlackMessageArchiver:
 
             # Save the message to archive file
             filename = os.path.join(archive_path_month, "%s.gz" % msg_date)
-            idx = 1
-            while os.path.isfile(filename):
-                filename = os.path.join(archive_path_month, "%s_%03d.gz" %(msg_date, idx))
-                idx += 1
-            with gzip.open(filename,  'w') as writer:
+#            idx = 1
+#            while os.path.isfile(filename):
+#                filename = os.path.join(archive_path_month, "%s_%03d.gz" %(msg_date, idx))
+#                idx += 1
+            with gzip.open(filename,  'a') as writer:
                 writer.write(json.dumps(msgs, indent=4).encode('utf-8'))
             self._logger.info("Messages on date %s saved to %s", msg_date, filename)
 

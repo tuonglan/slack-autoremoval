@@ -59,8 +59,8 @@ if __name__ == '__main__':
     parser.add_argument('--log_saving_period', type=int, default=11, help='Number of days for saving logs')
 
     parser_archive = sub_parsers.add_parser('archive')
-    parser_archive.add_argument('--start_date', type=str, help='Starting date of the archive: YYYYMMDD')
-    parser_archive.add_argument('--end_date', type=str, help='Ending date of the archive: YYYYMMDD')
+    parser_archive.add_argument('--start_date', type=str, help='Starting date of the archive: YYYYMMDDHH')
+    parser_archive.add_argument('--end_date', type=str, help='Ending date of the archive: YYYYMMDDHH')
     parser_archive.set_defaults(func=archive_messages)
     
     # Parser the pargument
